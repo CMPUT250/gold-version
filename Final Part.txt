@@ -1,0 +1,16 @@
+THis is for the final level:
+
+
+You start at the long hallway called "Hallway to Boiler room"
+
+Make a trigger somewhere in that hall that says
+"I wonder if Fred's ok… what is going on…?"
+
+Then you open the door to the left in that hallway to a room. 
+
+Make a trigger that has a phone call noise. 
+I added a small script so that you can talk to placables (in this case, the phone on the table).
+
+Touch the phone placable and start the conversation with Fred.
+
+Then you need to get to the Boiler room area to the end to win. 
