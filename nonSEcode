@@ -1,0 +1,627 @@
+se_module stuff:
+
+// Function Declarations
+void WhenModuleStarts(object subject);
+object EnteringObject();
+void makeRangeCircles();
+void setCam();
+
+// Main
+void main() {
+    //Variable Declarations
+    object subject;
+    subject = SE_AUX_GetNearestObjectByTagIncludeSelf("D20ModernBase2_0");
+    //Function Calls
+    int portC = GetLocalInt(OBJECT_SELF, "portCount");
+    portC = 0;
+    SetLocalInt(OBJECT_SELF, "portCount", portC);
+
+    int portAC = GetLocalInt(OBJECT_SELF, "portACount");
+    portAC = 0;
+    SetLocalInt(OBJECT_SELF, "portACount", portAC);
+
+    int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+    imgC = 0;
+    SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+
+    int atkC = GetLocalInt(OBJECT_SELF, "atkCount");
+    atkC = 0;
+    SetLocalInt(OBJECT_SELF, "atkCount", atkC);
+
+    int slowed = GetLocalInt(OBJECT_SELF, "isSlow");
+    slowed = 0;
+    SetLocalInt(OBJECT_SELF, "isSlow", slowed);
+
+    WhenModuleStarts(subject);
+    makeRangeCircles();
+    setCam();
+
+    ExecuteScript("pshb", OBJECT_SELF);
+}
+
+void makeRangeCircles() {
+    int SpellEffect = VFX_DUR_GLYPH_OF_WARDING;
+    effect veffect = EffectVisualEffect(SpellEffect);
+    string GhostTag = "ghost_";
+    int ghostnumber = 12;
+    int i = 0;
+
+    for (i; i<=ghostnumber; i++) {
+        GhostTag = "ghost_";
+        GhostTag += IntToString(i);
+        object Target = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, veffect, Target);
+    }
+}
+
+void setCam(){
+    float Direction;
+    float Distance;
+    float Pitch;
+    int TransitionType;
+    int Enable;
+    int Disable;
+    Direction = 90.0;
+    Distance = 10.0;
+    Pitch = 65.0;
+    TransitionType = CAMERA_TRANSITION_TYPE_VERY_FAST;
+    Enable = TRUE;
+    Disable = TRUE;
+
+    AssignCommand(GetFirstPC(), SetCameraFacing(Direction, Distance, Pitch, TransitionType));
+    SetCameraMode(GetFirstPC(), CAMERA_MODE_STIFF_CHASE_CAMERA);
+    //LockCameraDirection(GetFirstPC());
+    //LockCameraDistance(GetFirstPC());
+    //LockCameraPitch(GetFirstPC());
+    //SetCutsceneMode(GetFirstPC(), Enable, Disable);
+}
+
+dist_check
+
+// Includes
+#include "i_se_story"
+#include "i_se_aux"
+
+// Function Declarations
+object ThePlayerCharacter();
+void SpeakerSpeaksTextAtVolumeVolume(object Speaker, int Volume, string Text);
+void distCheck();
+//void changePortraitDown();
+void changePortraitUp();
+float TheDistanceBetweenFirstObjectAndSecondObject(object FirstObject, object SecondObject);
+void SpeakerSpeaksTextAtVolumeVolume_0(object Speaker_0, int Volume_0, string Text_0);
+int IfStoryPointIsActive(string StoryPoint);
+int IfXIsNumberOperatorY(float X, float Y, int NumberOperator);
+int IfFirstTextEqualsSecondText(string FirstText, string SecondText);
+void SetCreatureSPortraitToPortraitReference(object Creature, string PortraitReference);
+string ThePortraitReferenceOfCreature(object Creature_1);
+
+void MoverWalkSDistanceMetresTowardsTarget(object Mover, int walk, float Distance, object Target);
+const int ghostnumber = 12;
+
+// Main
+void main() {
+    //Function Calls
+
+    distCheck();
+}
+
+// Function Definitions
+object ThePlayerCharacter() {
+    return GetFirstPC();
+}
+void SpeakerSpeaksTextAtVolumeVolume(object Speaker, int Volume, string Text) {
+    AssignCommand(Speaker, SpeakString(Text, Volume));
+}
+void distCheck() {
+    // Implicits Declaration
+    // Implicits Definition
+    // Variable Declarations
+    string StoryPoint;
+    int IsActive;
+    object ThePlayerCharacter_0;
+    object FirstObject;
+    object SecondObject;
+    float Distance;
+    float X;
+    float Y;
+    int NumberOperator;
+    int NumberComparison;
+    int NumberComparison2;
+    int Question;
+    int i = 0;
+    string GhostTag = "ghost_";
+    string WPghoststart = "WP_ghost_";
+    string WPghostend = "_01";
+    effect eSlowDown = EffectMovementSpeedDecrease(50);
+    effect eGoFast = EffectMovementSpeedIncrease(99);
+
+    int portC = GetLocalInt(OBJECT_SELF, "portCount");
+    int atkC = GetLocalInt(OBJECT_SELF, "atkCount");
+    // Variable Definitions
+    ThePlayerCharacter_0 = ThePlayerCharacter();
+    FirstObject = ThePlayerCharacter_0;
+
+    int portAC = GetLocalInt(OBJECT_SELF, "portACount");
+    int isSeen = 0;
+    if (atkC > 0) {
+        atkC++;
+        SetLocalInt(OBJECT_SELF, "atkCount", atkC);
+    }
+
+    object oPC = GetEnteringObject();
+    GetIsPC(oPC);
+    //SendMessageToPC(oPC, IntToString(portAC));
+
+    for (i; i<=ghostnumber; i++) {
+        GhostTag = "ghost_";
+        GhostTag += IntToString(i);
+
+        SecondObject = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+        Distance = TheDistanceBetweenFirstObjectAndSecondObject(FirstObject, SecondObject);
+        NumberOperator = 4;
+        NumberComparison = IfXIsNumberOperatorY(Distance, 3.0, NumberOperator);
+        NumberComparison2 = IfXIsNumberOperatorY(Distance, 4.0, NumberOperator);
+
+        /*if (atkC > 0) {
+            SpeakerSpeaksTextAtVolumeVolume(SecondObject, TALKVOLUME_SHOUT, "Attack!");
+            AssignCommand(SecondObject, ActionAttack(ThePlayerCharacter_0));
+        } */
+
+        // Children
+        if(NumberComparison){
+            isSeen = 1;
+            object Speaker_0;
+            int Volume_0;
+            string Text_0;
+            Speaker_0 = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+            Volume_0 = TALKVOLUME_TALK;
+            //Text_0 = "too close";
+            object SoundObject;
+            SoundObject = SE_AUX_GetNearestObjectByTagIncludeSelf("scream");
+            SoundObjectPlay(SoundObject);
+            //SoundObjectStop(SoundObject);
+            portC++;
+            Text_0 = IntToString(portC);
+            if (portC >= 10) {
+                int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+                if (imgC < 10) {
+                    //SpeakerSpeaksTextAtVolumeVolume(Speaker_0, TALKVOLUME_SHOUT, IntToString(imgC));
+
+                    int slowed = GetLocalInt(OBJECT_SELF, "isSlow");
+                    if (slowed == 0) {
+                        slowed = 1;
+                        SetLocalInt(OBJECT_SELF, "isSlow", slowed);
+                        ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlowDown, ThePlayerCharacter_0);
+                    }
+
+
+                    changePortraitUp();
+                    portC = 0;
+                }
+            }
+            SetLocalInt(OBJECT_SELF, "portCount", portC);
+            // Children
+            //SpeakerSpeaksTextAtVolumeVolume_0(Speaker_0, Volume_0, Text_0);
+        }
+        if(NumberComparison2){
+            object Mover2;
+            int walk2;
+            float Distance2;
+            object Target2;
+            Mover2 = SecondObject;
+            walk2 = FALSE;
+            Distance2 = 3.0;
+            Target2 = FirstObject;
+            MoverWalkSDistanceMetresTowardsTarget(Mover2, walk2, Distance2, Target2);
+
+        }
+    }
+
+    if (isSeen == 0) {
+        object Speaker;
+        int Volume;
+        string Text;
+        //Speaker = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+        //Volume = TALKVOLUME_SHOUT;
+        //Text = "TOO FAR";
+        int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+        if (imgC < 10) {
+             portAC++;
+            SetLocalInt(OBJECT_SELF, "portACount", portAC);
+        }
+        int slowed2 = GetLocalInt(OBJECT_SELF, "isSlow");
+        if (slowed2 == 1) {
+            SpeakerSpeaksTextAtVolumeVolume(ThePlayerCharacter(), TALKVOLUME_SHOUT, IntToString(slowed2));
+            ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGoFast, ThePlayerCharacter_0);
+            slowed2 = 0;
+            SetLocalInt(OBJECT_SELF, "isSlow", slowed2);
+        }
+
+        // Children
+        //SpeakerSpeaksTextAtVolumeVolume(Speaker, Volume, Text);
+    }
+
+    //DelayCommand(0.01, WhenModuleSHeartBeats(object subject));
+    /*if (atkC >= 2) {
+        //TODO: stop attacking
+        //SpeakerSpeaksTextAtVolumeVolume(ThePlayerCharacter_0, TALKVOLUME_SHOUT, "HI");
+        SetLocalInt(OBJECT_SELF, "atkCount", 0);
+        int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+        imgC = 5;
+        SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+        SetCreatureSPortraitToPortraitReference_0(ThePlayerCharacter_0, "fred_5");
+
+        i = 0;
+        for (i;i<=ghostnumber;i++) {
+
+            SpeakerSpeaksTextAtVolumeVolume(ThePlayerCharacter_0, TALKVOLUME_SHOUT, IntToString(i));
+
+            GhostTag = "ghost_";
+            WPghoststart = "WP_ghost_";
+
+            GhostTag += IntToString(i);
+            object Attacker = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+            AssignCommand(Attacker, SurrenderToEnemies());
+            SetIsTemporaryNeutral(Attacker, ThePlayerCharacter_0, FALSE, 1.5);
+
+            WPghoststart += IntToString(i);
+            WPghoststart += WPghostend;
+
+            object Object = SE_AUX_GetNearestObjectByTagIncludeSelf(WPghoststart);
+            location Location_0 = GetLocation(Object);
+            AssignCommand(Attacker, ActionMoveToLocation(Location_0, TRUE));
+
+        }
+        SpeakerSpeaksTextAtVolumeVolume(ThePlayerCharacter_0, TALKVOLUME_SHOUT, "HI");
+
+    }*/
+
+    if (portAC >= 300) {
+        //SoundObjectStop(SoundObject);
+        //changePortraitDown();
+        portAC = 0;
+        SetLocalInt(OBJECT_SELF, "portACount", portAC);
+    }
+}
+/*
+void changePortraitDown(){
+    object Creature_1;
+    string PortraitReference_1;
+    object Speaker;
+    int Volume;
+    string Text;
+    int Question_1;
+    Creature_1 = ThePlayerCharacter();
+    PortraitReference_1 = ThePortraitReferenceOfCreature(Creature_1);
+    Speaker = ThePlayerCharacter();
+    Volume = TALKVOLUME_TALK;
+    Text = PortraitReference_1;
+    object Creature_0;
+    string PortraitReference_0;
+    Creature_0 = ThePlayerCharacter();
+    PortraitReference_0 = "fred_";
+    //SpeakerSpeaksTextAtVolumeVolume(Speaker, Volume, Text);
+    int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+    if (imgC > 0) {
+        object SoundObject;
+        SoundObject = SE_AUX_GetNearestObjectByTagIncludeSelf("barDecrease");
+        SoundObjectPlay(SoundObject);
+        imgC--;
+        SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+        PortraitReference_0 += IntToString(imgC);
+        SetCreatureSPortraitToPortraitReference(Creature_0, PortraitReference_0);
+    }
+}     */
+
+void changePortraitUp(){
+    object Creature_1;
+    string PortraitReference_1;
+    object Speaker;
+    int Volume;
+    string Text;
+    string FirstText;
+    string SecondText;
+    int TextsAreEqual;
+    int Question_1;
+    Creature_1 = ThePlayerCharacter();
+    PortraitReference_1 = ThePortraitReferenceOfCreature(Creature_1);
+    Speaker = ThePlayerCharacter();
+    Volume = TALKVOLUME_TALK;
+    Text = PortraitReference_1;
+    FirstText = PortraitReference_1;
+    object Creature_0;
+    string PortraitReference_0;
+    Creature_0 = ThePlayerCharacter();
+    PortraitReference_0 = "fred_";
+    //SpeakerSpeaksTextAtVolumeVolume(Speaker, Volume, Text);
+    int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+    imgC++;
+    SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+    //SpeakerSpeaksTextAtVolumeVolume(Creature_0, TALKVOLUME_SHOUT, IntToString(imgC));
+    int i = 0;
+    string GhostTag = "ghost_";
+
+    if(imgC == 10){
+        int atkC = GetLocalInt(OBJECT_SELF, "atkCount");
+        atkC = 1;
+        SetLocalInt(OBJECT_SELF, "atkCount", atkC);
+        PortraitReference_0 += IntToString(imgC);
+        SetCreatureSPortraitToPortraitReference(Creature_0, PortraitReference_0);
+        //for (i; i<=ghostnumber; i++) {
+            GhostTag = "ghost_";
+            GhostTag += IntToString(i);
+            object Attacker = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+            SpeakerSpeaksTextAtVolumeVolume(Attacker, TALKVOLUME_SHOUT, "Die!");
+
+            effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, Creature_0);
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectDeath(), Creature_0);
+            //object subject = SE_AUX_GetNearestObjectByTagIncludeSelf("MODULE");
+            //WhenPlayerPressesTheRespawnButton(subject);
+            //SetIsTemporaryEnemy(Creature_0, Attacker, TRUE, 5.0);
+            //AssignCommand(Attacker, ActionAttack(Creature_0));
+            //SetIsTemporaryEnemy(Attacker, Creature_0, FALSE, 1.5);
+        //}
+        //AssignCommand(Attacker, ClearAllActions(1));
+
+    } else if (imgC > 10) {
+        //SpeakerSpeaksTextAtVolumeVolume(Creature_0, TALKVOLUME_SHOUT, "!!!!!");
+        //do nothing
+    } else {
+        PortraitReference_0 += IntToString(imgC);
+        SetCreatureSPortraitToPortraitReference(Creature_0, PortraitReference_0);
+    }
+}
+
+float TheDistanceBetweenFirstObjectAndSecondObject(object FirstObject, object SecondObject) {
+    return GetDistanceBetween(FirstObject, SecondObject);
+}
+void SpeakerSpeaksTextAtVolumeVolume_0(object Speaker_0, int Volume_0, string Text_0) {
+    AssignCommand(Speaker_0, SpeakString(Text_0, Volume_0));
+}
+int IfStoryPointIsActive(string StoryPoint) {
+    return SE2_Story_GetState(GetFirstPC(), StoryPoint) == STORY_POINT_STATE_ENABLED;
+}
+int IfXIsNumberOperatorY(float X, float Y, int NumberOperator) {
+    int numberOperator = NumberOperator;
+    if(numberOperator == 0)
+        return X > Y;
+    else if(numberOperator == 1)
+        return X < Y;
+    else if(numberOperator == 2)
+        return X == Y;
+    else if(numberOperator == 3)
+        return X >= Y;
+    else if(numberOperator == 4)
+        return X <= Y;
+    else
+        return FALSE;
+}
+
+int IfFirstTextEqualsSecondText(string FirstText, string SecondText) {
+    return FirstText == SecondText;
+}
+void SetCreatureSPortraitToPortraitReference(object Creature, string PortraitReference) {
+    SetPortraitResRef(Creature, PortraitReference);
+}
+string ThePortraitReferenceOfCreature(object Creature_1) {
+    return GetPortraitResRef(Creature_1);
+}
+
+void MoverWalkSDistanceMetresTowardsTarget(object Mover, int walk, float Distance, object Target) {
+    location moverLocation;
+    vector moverPosition;
+    float moverFacing;
+    object moverArea;
+    vector targetPosition;
+    vector heading;
+    moverLocation = GetLocation(Mover);
+    moverPosition = GetPositionFromLocation(moverLocation);
+    moverArea = GetAreaFromLocation(moverLocation);
+    moverFacing = GetFacingFromLocation(moverLocation);
+    targetPosition = GetPositionFromLocation(GetLocation(Target));
+    heading = Vector(targetPosition.x - moverPosition.x, targetPosition.y -   moverPosition.y, targetPosition.z - moverPosition.z);
+    heading = VectorNormalize(heading);
+    moverPosition = moverPosition + Distance*heading;
+    moverLocation = Location(moverArea, moverPosition, moverFacing);
+    object Speaker = ThePlayerCharacter();
+    int Volume = TALKVOLUME_TALK;
+    string Text = "walk to ghost";
+    //SpeakerSpeaksTextAtVolumeVolume(Speaker, Volume, Text);
+    AssignCommand(Mover, ActionMoveToLocation(moverLocation, walk));
+}
+
+PSHB:
+
+void main() {
+    float fInterval = 0.1; // number of seconds to repeat
+    object oPC = GetEnteringObject();
+    GetIsPC(oPC);
+    //SendMessageToPC(oPC, "in portrait swap");
+    ExecuteScript("dist_check", OBJECT_SELF);
+    ExecuteScript("se_safezone_c", OBJECT_SELF);
+    // end actual heartbeat code
+    DelayCommand(fInterval, AssignCommand(OBJECT_SELF, ExecuteScript("pshb", OBJECT_SELF)));
+}
+
+
+
+void playerRespawn();
+object Player();
+void SetCreatureSPortraitToPortraitReference(object Creature, string PortraitReference);
+
+void playerRespawn() {
+    // Implicits Declaration
+    object Player_0;
+    // Implicits Definition
+    Player_0 = Player();
+    // Variable Declarations
+
+    AssignCommand(Player_0, ActionJumpToLocation(GetStartingLocation()));
+
+    int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+    imgC = 5;
+    SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+    SetCreatureSPortraitToPortraitReference(Player_0, "fred_5");
+}
+
+object Player() {
+    return GetLastRespawnButtonPresser();
+}
+
+void SetCreatureSPortraitToPortraitReference(object Creature, string PortraitReference) {
+    SetPortraitResRef(Creature, PortraitReference);
+}
+//::///////////////////////////////////////////////
+//:: Generic On Pressed Respawn Button
+//:: Copyright (coffee) 2001 Bioware Corp.
+//:://////////////////////////////////////////////
+/*
+// * June 1: moved RestoreEffects into plot include
+*/
+//:://////////////////////////////////////////////
+//:: Created By:   Brent
+//:: Created On:   November
+//:://////////////////////////////////////////////
+#include "nw_i0_plot"
+
+
+
+///////////////////////////////////////////////////////////////////////
+// this function resets variabls and clears the arenas in the fighter
+// 'gauntlet' subplot in chapter one
+///////////////////////////////////////////////////////////////////////
+
+void ClearArena(object oPC,string sArena)
+{
+    if(sArena == "Map_M1S4C")
+    {
+        DestroyObject(GetObjectByTag("M1S04CHRUSK02"));
+        DestroyObject(GetObjectByTag("M1S4CBeast"));
+        SetLocalInt(GetObjectByTag(sArena),"NW_A_M1S4HruskDef",0);
+    }
+    else if(sArena == "Map_M1S4D")
+    {
+        DestroyObject(GetObjectByTag("M1S04CFASHI02"));
+        DestroyObject(GetObjectByTag("M1S4DBeast"));
+        SetLocalInt(GetObjectByTag(sArena),"NW_A_M1S4FashiDef",0);
+        CreateItemOnObject("M1S04IBADGELVL01",oPC);
+    }
+    else if(sArena == "Map_M1S4E")
+    {
+        DestroyObject(GetObjectByTag("M1S04CAGAR02"));
+        DestroyObject(GetObjectByTag("M1S4EBeast"));
+        SetLocalInt(GetObjectByTag(sArena),"NW_A_M1S4AgarDef",0);
+        CreateItemOnObject("M1S04IBADGELVL02",oPC);
+    }
+    else if(sArena == "Map_M1S4F")
+    {
+        DestroyObject(GetObjectByTag("M1S04CCLAUDUS02"));
+        DestroyObject(GetObjectByTag("M1S4FBeast",0));
+        DestroyObject(GetObjectByTag("M1S4FBeast",1));
+        SetLocalInt(GetObjectByTag(sArena),"NW_A_M1S4ClaudusDef",0);
+        CreateItemOnObject("M1S04IBADGELVL03",oPC);
+    }
+    SetLocalInt(oPC,"NW_L_M1S4Won",FALSE);
+    SetLocalInt(GetModule(),"NW_G_" + sArena + "_Occupied",FALSE);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+void main()
+{
+    object oRespawner = GetLastRespawnButtonPresser();
+    ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectResurrection(),oRespawner);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oRespawner)), oRespawner);
+    RemoveEffects(oRespawner);
+    //* Return PC to temple
+
+
+
+    string sDestTag =  "NW_DEATH_TEMPLE";
+    string sArea = GetTag(GetArea(oRespawner));
+    /*
+      CHAPTER 1 SPECIAL CASE
+    */
+    if (sArea == "MAP_M1S3B")
+    {
+        sDestTag = "M1_WIZSPAWN";
+    }
+    else
+    if (sArea == "Map_M1S4E" || sArea == "Map_M1S4C" || sArea == "Map_M1S4D" || sArea == "Map_M1S4F")
+    {
+        sDestTag = "M1_FIGSPAWN";
+        ClearArena(oRespawner,sArea);
+    }
+    else
+    /*
+      CHAPTER 2 SPECIAL CASE
+    */
+/*
+    if (sArea == "MAP_M2Q2F2" && GetDistanceBetweenLocations(GetLocation(GetObjectByTag("M2Q2F2_M2Q2G")), GetLocation(oRespawner)) < 5.0 && GetLocalInt(GetModule(),"NW_M2Q2E_WoodsFreed") == 0)
+    {
+
+      sDestTag = "WP_M2Q2GtoM2Q2F";
+    }
+    else
+*/
+    // * Druid Match
+    if (sArea == "MAP_M2Q2E2")
+    {
+      sDestTag = "WP_M2Q2E_ENDDCC";
+      DestroyObject(GetObjectByTag("M2Q2EWELCARFT"));
+      DestroyObject(GetObjectByTag("M2Q2EHENNAFT"));
+      DestroyObject(GetObjectByTag("M2Q2EJANKENFT"));
+      DestroyObject(GetObjectByTag("M2Q2EELGARFT"));
+      // * June 2002: Destroy pets as well
+      DestroyObject(GetObjectByTag("M2Q2EWELCARFTPET"));
+        DestroyObject(GetObjectByTag("M2Q2EHENNAFTPET"));
+        DestroyObject(GetObjectByTag("M2Q2EJANKENFTPET"));
+        DestroyObject(GetObjectByTag("M2Q2EELGARFTPET"));
+
+
+      SetLocalInt(GetObjectByTag("M2Q2EJAER"),"NW_M2Q2E_LFIGHT",FALSE);
+    }
+    /*
+       CHAPTER 3 SPECIAL CASE
+    */
+    else
+    // * time travel dungeon past - Dungeon
+    if (sArea == "M3Q2G")
+    {
+        sDestTag = "WP_ALTERNATE_SPWN";
+    }
+    // * time travel dungeon past - Grove
+    else
+    if (sArea == "M3Q2I")
+    {
+        sDestTag = "WP_ALTERNATE_SPWN";
+    }
+    if (GetIsObjectValid(GetObjectByTag(sDestTag)))
+    {
+
+        if (sDestTag == "NW_DEATH_TEMPLE")
+        {
+            object oPriest = GetObjectByTag("NW_DEATH_CLERIC");
+            //SetLocalInt(oPriest, "NW_L_SAYONELINER", 10);
+
+            //AssignCommand(oPriest, DelayCommand(3.0,ActionStartConversation(oRespawner)));
+            AssignCommand(oPriest, DelayCommand(2.1, PlayVoiceChat(VOICE_CHAT_TALKTOME, oPriest)));
+
+            SetLocalLocation(oRespawner, "NW_L_I_DIED_HERE", GetLocation(GetLastRespawnButtonPresser()));
+            SetLocalInt(oRespawner, "NW_L_I_DIED", 1);
+            SetLocalObject(oPriest, "NW_L_LASTDIED", GetLastRespawnButtonPresser());
+            // * April 2002: Moved penalty here, only when going back to the death temple
+        }
+        object oSpawnPoint = GetObjectByTag(sDestTag);
+        AssignCommand(oRespawner,JumpToLocation(GetLocation(oSpawnPoint)));
+        // * mak
+    }
+    else
+    {
+        playerRespawn();
+    }
+ }
+
