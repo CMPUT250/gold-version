@@ -624,4 +624,59 @@ void main()
         playerRespawn();
     }
  }
+ 
+ jukebox code for creating ghosts in maze.mod
+ 
+ void makeRangeCircles() {
+    int SpellEffect = VFX_DUR_GLYPH_OF_WARDING;
+    effect veffect = EffectVisualEffect(SpellEffect);
+    string GhostTag = "ghost_";
+    int ghostnumber = 6;
+    int i = 0;
+
+    for (i; i<=ghostnumber; i++) {
+        GhostTag = "ghost_";
+        GhostTag += IntToString(i);
+        object Target = SE_AUX_GetNearestObjectByTagIncludeSelf(GhostTag);
+        ApplyEffectToObject(DURATION_TYPE_PERMANENT, veffect, Target);
+    }
+}
+
+makeRangeCircles();
+
+        int portC = GetLocalInt(OBJECT_SELF, "portCount");
+        portC = 0;
+        SetLocalInt(OBJECT_SELF, "portCount", portC);
+
+        int portAC = GetLocalInt(OBJECT_SELF, "portACount");
+        portAC = 0;
+        SetLocalInt(OBJECT_SELF, "portACount", portAC);
+
+        int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+        imgC = 0;
+        SetLocalInt(OBJECT_SELF, "imgCount", imgC);
+
+        int chgRes = GetLocalInt(OBJECT_SELF, "changeRespawn");
+        chgRes = 1;
+        SetLocalInt(OBJECT_SELF, "changeRespawn", chgRes);
+
+        int slowed = GetLocalInt(OBJECT_SELF, "isSlow");
+        slowed = 0;
+        SetLocalInt(OBJECT_SELF, "isSlow", slowed);
+
+        ExecuteScript("pshb", OBJECT_SELF);
+        
+respawn code for maze.mod
+
+if (GetLocalInt(OBJECT_SELF, "changeRespawn") == 1) {
+    //    SendMessageToPC(oPC, "here");
+        lSpawn = GetLocation(GetWaypointByTag("spawn"));
+    }
+
+    //SendMessageToPC(oPC, "here2");
+
+    AssignCommand(oRespawner,JumpToLocation(lSpawn));
+    int imgC = GetLocalInt(OBJECT_SELF, "imgCount");
+    imgC = 0;
+    SetLocalInt(OBJECT_SELF, "imgCount", imgC);
 
