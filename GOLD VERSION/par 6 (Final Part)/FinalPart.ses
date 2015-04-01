@@ -1010,7 +1010,7 @@
                                 </CodeBlocks>
                               </ScriptIt>
                               <ScriptIt>
-                                <Name>End the module with movie &lt;End Movie&gt; after &lt;Delay Time&gt; seconds</Name>
+                                <Name>Start new module with filename &lt;Module Name&gt;</Name>
                                 <Visible>true</Visible>
                                 <Enabled>true</Enabled>
                                 <Labels>
@@ -1019,14 +1019,14 @@
                                 <Children/>
                                 <CodeBlocks>
                                   <CodeBlockReference library="DefaultNWNLibrary">
-                                    <Name>End the module with movie &lt;End Movie&gt; after &lt;Delay Time&gt; seconds</Name>
+                                    <Name>Start new module with filename &lt;Module Name&gt;</Name>
                                     <Visible>true</Visible>
                                     <Enabled>true</Enabled>
                                     <Labels/>
-                                    <TargetId>372</TargetId>
+                                    <TargetId>380</TargetId>
                                     <Parameters>
                                       <KnowIt>
-                                        <Name>End Movie</Name>
+                                        <Name>Module Name</Name>
                                         <Visible>true</Visible>
                                         <Enabled>true</Enabled>
                                         <Labels/>
@@ -1035,20 +1035,7 @@
                                         </Types>
                                         <Binding flavour="constant">
                                           <Type>string</Type>
-                                          <Value></Value>
-                                        </Binding>
-                                      </KnowIt>
-                                      <KnowIt>
-                                        <Name>Delay Time</Name>
-                                        <Visible>true</Visible>
-                                        <Enabled>true</Enabled>
-                                        <Labels/>
-                                        <Types>
-                                          <Type>float</Type>
-                                        </Types>
-                                        <Binding flavour="constant">
-                                          <Type>float</Type>
-                                          <Value>1.0</Value>
+                                          <Value>Final Part 2</Value>
                                         </Binding>
                                       </KnowIt>
                                     </Parameters>
@@ -1097,7 +1084,7 @@
                             <Types>
                               <Type>dialogue_line</Type>
                             </Types>
-                            <Binding flavour="resource">fred_phone_convo.DLG#0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0</Binding>
+                            <Binding flavour="resource">fred_phone_convo.DLG#0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0</Binding>
                           </KnowIt>
                         </Parameters>
                       </CodeBlockReference>
