@@ -617,7 +617,7 @@
                                     <Types>
                                       <Type>sound</Type>
                                     </Types>
-                                    <Binding flavour="resource">_mdrn_as_screaks.UTS</Binding>
+                                    <Binding flavour="resource">cell_phone_ringi.UTS</Binding>
                                   </KnowIt>
                                 </Parameters>
                               </CodeBlockReference>
@@ -1084,7 +1084,7 @@
                             <Types>
                               <Type>dialogue_line</Type>
                             </Types>
-                            <Binding flavour="resource">fred_phone_convo.DLG#0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0</Binding>
+                            <Binding flavour="resource">fred_phone_convo.DLG#0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0&gt;0</Binding>
                           </KnowIt>
                         </Parameters>
                       </CodeBlockReference>
